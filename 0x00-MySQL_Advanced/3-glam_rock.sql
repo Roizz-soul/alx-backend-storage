@@ -1,14 +1,13 @@
 -- Script to list stuff
 -- SQL script to list Glam rock bands ranked by their longevity
+
+-- Select band_name and lifespan from metal band table
 SELECT 
     band_name,
-    CASE 
-        WHEN split IS NULL THEN (2022 - formed)
-        ELSE (split - formed)
-    END AS lifespan
+    (IFNULL(split, '2020') - formed) AS lifespan
 FROM 
     metal_bands
 WHERE 
-    style = 'Glam rock'
+    FIND_IN_SET('Glam rock', IFNULL(style, "")) > 0
 ORDER BY 
     lifespan DESC;
