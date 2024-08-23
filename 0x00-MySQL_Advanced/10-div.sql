@@ -1,9 +1,10 @@
 -- Script to create a function
 -- create a function called safediv
+DROP FUNCTION IF EXISTS SafeDiv;
 DELIMITER $$
 
-CREATE FUNCTION SafeDiv(a INT, b INT)
-RETURNS INT
+CREATE FUNCTION SafeDiv (a INT, b INT)
+RETURNS FLOAT
 DETERMINISTIC
 BEGIN
     -- Check if b is 0
