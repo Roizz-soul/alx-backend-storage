@@ -1,0 +1,2 @@
+// Command to list all documents that match a data in a collection in mongoDB
+db.school.deleteMany({name: "Holberton school"})

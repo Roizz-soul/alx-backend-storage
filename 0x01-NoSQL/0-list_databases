@@ -1,0 +1,2 @@
+// Command to list all databases in MongoDB
+show dbs

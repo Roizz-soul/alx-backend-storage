@@ -1,0 +1,2 @@
+// Command to update a documents in a collection in mongoDB
+db.school.updateMany({name: "Holberton school"}, {$set: {address: "972 Mission street"}})

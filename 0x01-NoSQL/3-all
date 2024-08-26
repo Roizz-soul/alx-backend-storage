@@ -1,0 +1,2 @@
+// Command to list all documents in a collection in mongoDB
+db.school.find()

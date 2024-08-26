@@ -1,0 +1,2 @@
+// Command to insert a document in a collection for mongoDB
+db.school.insertOne({"name": "Holberton school"})

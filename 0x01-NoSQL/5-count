@@ -1,0 +1,2 @@
+// Command to count all documents in a collection in mongoDB
+db.school.count()

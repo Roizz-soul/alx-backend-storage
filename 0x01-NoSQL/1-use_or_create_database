@@ -1,0 +1,2 @@
+// Command to create a database in mongoDB
+use my_db
