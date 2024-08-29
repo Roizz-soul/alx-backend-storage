@@ -18,8 +18,8 @@ def replay(method: Callable):
     print(f"{method.__qualname__} was called {num_calls} times:")
 
     for input_str, output_str in zip(inputs, outputs):
-        print(f"{method.__qualname__}(*{input_str.decode('utf-8')}) ->\
-                {output_str.decode('utf-8')}")
+        print(f"{method.__qualname__}(*{input_str.decode('utf-8')}) -> \
+{output_str.decode('utf-8')}")
 
 
 def call_history(method: Callable) -> Callable:
