@@ -6,21 +6,21 @@ from typing import Union, Callable, Optional
 from functools import wraps
 
 
-
 def replay(method: Callable):
     """ Displays the history of calls of the method """
     input_key = f"{method.__qualname__}:inputs"
     output_key = f"{method.__qualname__}:outputs"
-    
+
     inputs = method.__self__._redis.lrange(input_key, 0, -1)
     outputs = method.__self__._redis.lrange(output_key, 0, -1)
-    
+
     num_calls = len(inputs)
     print(f"{method.__qualname__} was called {num_calls} times:")
-            
+
     for input_str, output_str in zip(inputs, outputs):
-        print(f"{method.__qualname__}(*{input_str.decode('utf-8')}) -> 
+        print(f"{method.__qualname__}(*{input_str.decode('utf-8')}) ->\
                 {output_str.decode('utf-8')}")
+
 
 def call_history(method: Callable) -> Callable:
     """ Records all inputs and outputs of the method """
@@ -37,6 +37,7 @@ def call_history(method: Callable) -> Callable:
         return result
 
     return wrapper
+
 
 def count_calls(method: Callable) -> Callable:
     """ Counts how many times a method is called """
