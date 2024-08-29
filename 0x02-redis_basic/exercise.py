@@ -6,7 +6,7 @@ from typing import Union, Callable, Optional
 from functools import wraps
 
 
-def replay(method: Callable):
+def replay(method: Callable) -> None:
     """ Displays the history of calls of the method """
     input_key = f"{method.__qualname__}:inputs"
     output_key = f"{method.__qualname__}:outputs"
