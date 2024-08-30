@@ -10,18 +10,18 @@ from typing import Callable
 redis_client = redis.Redis()
 
 
-def cache_page(func: Callable) -> Callable:
+def cache_page(fn: Callable) -> Callable:
     """ Decorator to cache the page and track the access count """
-    @wraps(func)
+    @wraps(fn)
     def wrapper(url: str) -> str:
         """ Wrapper to track number of times URL is accessed """
-        redis_client.incrby(f"count:{url}")
+        redis_client.incr(f"count:{url}")
 
         catched_page = redis_client.get(f"cache:{url}")
         if cached_page:
             return cached_page.decode('utf-8')
 
-        html_content = func(url)
+        html_content = fn(url)
 
         redis_client.setex(f"cache:{url}", 10, html_content)
 
