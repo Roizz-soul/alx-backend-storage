@@ -17,7 +17,7 @@ def cache_page(fn: Callable) -> Callable:
         """ Wrapper to track number of times URL is accessed """
         redis_client.incr(f"count:{url}")
 
-        catched_page = redis_client.get(f"cache:{url}")
+        cached_page = redis_client.get(f"cache:{url}")
         if cached_page:
             return cached_page.decode('utf-8')
 

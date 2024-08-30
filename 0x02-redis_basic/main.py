@@ -1,22 +1,30 @@
-#!/usr/bin/env python3
-""" Main file """
+from web import get_page
+import redis
 
-Cache = __import__('exercise').Cache
-replay = __import__('exercise').replay
+# Initialize Redis client
+redis_client = redis.Redis()
 
-cache = Cache()
+def get_access_count(url: str) -> int:
+    """Retrieve the count of how many times a URL was accessed."""
+    count = redis_client.get(f"count:{url}")
+    return int(count) if count else 0
 
-s1 = cache.store("first")
-print(s1)
-s2 = cache.store("secont")
-print(s2)
-s3 = cache.store("third")
-print(s3)
+if __name__ == "__main__":
+    url = "http://www.google.com"
 
-inputs = cache._redis.lrange("{}:inputs".format(cache.store.__qualname__), 0, -1)
-outputs = cache._redis.lrange("{}:outputs".format(cache.store.__qualname__), 0, -1)
+    # Test the get_page function multiple times
+    print("First call (should take longer if not cached):")
+    print(get_page(url))  # This will fetch and cache the page
+    print(f"Access count after first call: {get_access_count(url)}\n")
 
-print("inputs: {}".format(inputs))
-print("outputs: {}".format(outputs))
+    print("Second call (should be fast, fetched from cache):")
+    print(get_page(url))  # This should return the cached page quickly
+    print(f"Access count after second call: {get_access_count(url)}\n")
 
-replay(cache.store)
+    print("Waiting for cache to expire (10 seconds)...")
+    import time
+    time.sleep(10)
+
+    print("Third call (cache expired, should take longer):")
+    print(get_page(url))  # Cache expired, so this will fetch the page again
+    print(f"Access count after third call: {get_access_count(url)}")
