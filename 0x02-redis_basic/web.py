@@ -15,7 +15,7 @@ def cache_page(func: Callable) -> Callable:
     @wraps(func)
     def wrapper(url: str) -> str:
         """ Wrapper to track number of times URL is accessed """
-        redis_client.incr(f"count:{url}")
+        redis_client.incrby(f"count:{url}")
 
         catched_page = redis_client.get(f"cache:{url}")
         if cached_page:
@@ -34,6 +34,5 @@ def cache_page(func: Callable) -> Callable:
 def get_page(url: str) -> str:
     """ Gets the page and returns its content """
     response = requests.get(url)
-    html_content = response.text
 
-    return html_content
+    return response.text
