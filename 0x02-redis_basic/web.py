@@ -6,33 +6,29 @@ import requests
 from functools import wraps
 from typing import Callable
 
+redis = redis.Redis()
 
-redis_client = redis.Redis()
 
+def wrap_requests(fn: Callable) -> Callable:
+    """ Decorator wrapper """
 
-def cache_page(fn: Callable) -> Callable:
-    """ Decorator to cache the page and track the access count """
     @wraps(fn)
-    def wrapper(url: str) -> str:
-        """ Wrapper to track number of times URL is accessed """
-        redis_client.incr(f"count:{url}")
-
-        cached_page = redis_client.get(f"cache:{url}")
-        if cached_page:
-            return cached_page.decode('utf-8')
-
-        html_content = fn(url)
-
-        redis_client.setex(f"cache:{url}", 10, html_content)
-
-        return html_content
+    def wrapper(url):
+        """ Wrapper for decorator guy """
+        redis.incr(f"count:{url}")
+        cached_response = redis.get(f"cached:{url}")
+        if cached_response:
+            return cached_response.decode('utf-8')
+        result = fn(url)
+        redis.setex(f"cached:{url}", 10, result)
+        return result
 
     return wrapper
 
 
-@cache_page
+@wrap_requests
 def get_page(url: str) -> str:
-    """ Gets the page and returns its content """
+    """get page self descriptive
+    """
     response = requests.get(url)
-
     return response.text
